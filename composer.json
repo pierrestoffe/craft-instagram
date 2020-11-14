@@ -1,0 +1,43 @@
+{
+    "name": "pierrestoffe/craft-instagram",
+    "description": "Instagram integration for Craft CMS",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "instagram"
+    ],
+    "support": {
+        "docs": "https://github.com/pierrestoffe/craft-instagram/blob/master/README.md",
+        "issues": "https://github.com/pierrestoffe/craft-instagram/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pierre Stoffe",
+            "homepage": "https://pierrestoffe.be"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0",
+        "facebook/graph-sdk": "^5.7",
+        "pierrestoffe/php-instagram-graph-sdk": "2.2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "pierrestoffe\\instagram\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Instagram",
+        "handle": "instagram",
+        "developer": "Pierre Stoffe",
+        "developerUrl": "https://pierrestoffe.be",
+        "documentationUrl": "https://github.com/pierrestoffe/craft-instagram/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/pierrestoffe/craft-instagram/master/CHANGELOG.md",
+        "class": "pierrestoffe\\instagram\\Instagram"
+    }
+}

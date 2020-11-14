@@ -1,0 +1,173 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Instagram plugin for Craft CMS 3.x
+ *
+ * Instagram Settings.twig
+ *
+ * @author    Pierre Stoffe
+ * @copyright Copyright (c) 2020 Pierre Stoffe
+ * @link      https://pierrestoffe.be
+ * @package   Instagram
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("pierrestoffe\\instagram\\assetbundles\\instagram\\InstagramAsset") %}
+
+<div class="field first">
+    <div class="heading">
+        <h2>{{ 'Facebook App information'|t('instagram') }}</h2>
+        <div class="instructions">{{ 'The information of the Facebook app you created on Facebook\'s App Dashboard. <a href="https://developers.facebook.com/apps/" target="_blank" rel="noopener" class="go">Go to your apps</a>.'|t('instagram')|md }}</div>
+    </div>
+</div>
+
+{{ forms.textField({
+    label: 'App ID',
+    instructions: 'The App ID of the Facebook App you created on Facebook\'s App Dashboard.',
+    id: 'facebookAppId',
+    name: 'facebookAppId',
+    value: settings['facebookAppId'],
+    required: false,
+    errors: settings.getErrors('facebookAppId'),
+}) }}
+
+{{ forms.textField({
+    label: 'App Secret',
+    instructions: 'The App Secret of the Facebook App you created on Facebook\'s App Dashboard.',
+    id: 'facebookAppSecret',
+    name: 'facebookAppSecret',
+    value: settings['facebookAppSecret'],
+    required: false,
+    errors: settings.getErrors('facebookAppSecret'),
+}) }}
+
+{% set disabled = false %}
+{% if not settings['facebookAppId'] or not settings['facebookAppSecret'] %}
+    {% set disabled = true %}
+{% endif %}
+
+<div class="buttons">
+    <button type="button" id="facebook" class="btn big submit formsubmit {{ disabled ? 'disabled' }}" data-action="instagram/facebook/get-access-token">{{ 'Get Facebook access token'|t('instagram') }}</button>
+</div>
+
+{% set savedFacebookAccessTokens = craft.instagram.getSavedFacebookAccessTokens() %}
+{% if savedFacebookAccessTokens|length %}
+    {% set tableValues = [] %}
+    {% for savedFacebookAccessToken in savedFacebookAccessTokens %}
+        {% set dateExpire = savedFacebookAccessToken.dateExpire %}
+        {% set daysDifference = date(dateExpire).diff(date(now)) %}
+        {% set daysDifferenceExpired = date(dateExpire) < date(now) ? true %}
+        {% set daysDifferenceRemaining = daysDifference.days %}
+        {% set newTableValue = {
+            username: savedFacebookAccessToken.username,
+            accessToken: savedFacebookAccessToken.accessToken|truncate(50, split_single_word=true),
+            dateExpiry: dateExpire|date('d F, Y') ~ (daysDifferenceExpired ? ' → expired ' ~ daysDifferenceRemaining ~ ' days ago' : ' → expires in ' ~ daysDifferenceRemaining ~ ' days')
+        } %}
+        {% set tableValues = tableValues|merge([newTableValue]) %}
+    {% endfor %}
+    {{ forms.editableTableField({
+        label: 'Facebook access tokens'|t('instagram'),
+        id: 'facebookAccessTokens',
+        name: 'facebookAccessTokens',
+        cols: {
+            username: {
+                type: 'singleline',
+                heading: 'Username'|t('instagram'),
+                width: 200,
+            },
+            accessToken: {
+                type: 'singleline',
+                heading: 'Access token'|t('instagram'),
+            },
+            dateExpiry: {
+                type: 'singleline',
+                heading: 'Expires'|t('instagram'),
+                info: 'Renews automatically'|t('instagram'),
+            },
+        },
+        rows: tableValues,
+        static: true
+    }) }}
+{% endif %}
+
+<hr>
+
+<div class="field first">
+    <div class="heading">
+        <h2>{{ 'Instagram App information'|t('instagram') }}</h2>
+        <div class="instructions">{{ 'The information of the Instagram app you created on Facebook\'s App Dashboard. <a href="https://developers.facebook.com/apps/" target="_blank" rel="noopener" class="go">Go to your apps</a>.'|t('instagram')|md }}</div>
+    </div>
+</div>
+
+{{ forms.textField({
+    label: 'App ID',
+    instructions: 'The App ID of the Instagram App you created on Facebook\'s App Dashboard.',
+    id: 'instagramAppId',
+    name: 'instagramAppId',
+    value: settings['instagramAppId'],
+    required: false,
+    errors: settings.getErrors('instagramAppId'),
+}) }}
+
+{{ forms.textField({
+    label: 'App Secret',
+    instructions: 'The App Secret of the Instagram App you created on Facebook\'s App Dashboard.',
+    id: 'instagramAppSecret',
+    name: 'instagramAppSecret',
+    value: settings['instagramAppSecret'],
+    required: false,
+    errors: settings.getErrors('instagramAppSecret'),
+}) }}
+                
+{% set disabled = false %}
+{% if not settings['instagramAppId'] or not settings['instagramAppSecret'] %}
+    {% set disabled = true %}
+{% endif %}
+
+<div class="buttons">
+    <button type="button" id="facebook" class="btn big submit formsubmit {{ disabled ? 'disabled' }}" data-action="instagram/instagram/get-access-token">{{ 'Get Instagram access token'|t('instagram') }}</button>
+</div>
+
+{% set savedInstagramAccessTokens = craft.instagram.getSavedInstagramAccessTokens() %}
+{% if savedInstagramAccessTokens|length %}
+    {% set tableValues = [] %}
+    {% for savedInstagramAccessToken in savedInstagramAccessTokens %}
+        {% set dateExpire = savedInstagramAccessToken.dateExpire %}
+        {% set daysDifference = date(dateExpire).diff(date(now)) %}
+        {% set daysDifferenceExpired = date(dateExpire) < date(now) ? true %}
+        {% set daysDifferenceRemaining = daysDifference.days %}
+        {% set newTableValue = {
+            username: savedInstagramAccessToken.username,
+            accessToken: savedInstagramAccessToken.accessToken|truncate(50, split_single_word=true),
+            dateExpiry: dateExpire|date('d F, Y') ~ (daysDifferenceExpired ? ' → expired ' ~ daysDifferenceRemaining ~ ' days ago' : ' → expires in ' ~ daysDifferenceRemaining ~ ' days')
+        } %}
+        {% set tableValues = tableValues|merge([newTableValue]) %}
+    {% endfor %}
+    {{ forms.editableTableField({
+        label: 'Instagram access tokens'|t('instagram'),
+        id: 'instagramAccessTokens',
+        name: 'instagramAccessTokens',
+        cols: {
+            username: {
+                type: 'singleline',
+                heading: 'Username'|t('instagram'),
+                width: 200,
+            },
+            accessToken: {
+                type: 'singleline',
+                heading: 'Access token'|t('instagram'),
+            },
+            dateExpiry: {
+                type: 'singleline',
+                heading: 'Expires'|t('instagram'),
+                info: 'Renews automatically'|t('instagram'),
+                width: 300,
+            },
+        },
+        rows: tableValues,
+        static: true
+    }) }}
+{% endif %}
