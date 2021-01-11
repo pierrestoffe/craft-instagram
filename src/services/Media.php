@@ -115,7 +115,7 @@ class Media extends Component
     {
         $translatedMessage = Craft::t(
             'instagram',
-            $shortMessage,
+            $shortMessage
         );
         
         Craft::$app->getSession()->setError($translatedMessage);
