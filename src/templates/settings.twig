@@ -63,7 +63,7 @@
         {% set daysDifferenceRemaining = daysDifference.days %}
         {% set newTableValue = {
             username: savedFacebookAccessToken.username,
-            accessToken: savedFacebookAccessToken.accessToken|truncate(50, splitSingleWord=true),
+            accessToken: savedFacebookAccessToken.accessToken|truncate(50),
             dateExpiry: dateExpire|date('d F, Y') ~ (daysDifferenceExpired ? ' → expired ' ~ daysDifferenceRemaining ~ ' days ago' : ' → expires in ' ~ daysDifferenceRemaining ~ ' days')
         } %}
         {% set tableValues = tableValues|merge([newTableValue]) %}
@@ -141,7 +141,7 @@
         {% set daysDifferenceRemaining = daysDifference.days %}
         {% set newTableValue = {
             username: savedInstagramAccessToken.username,
-            accessToken: savedInstagramAccessToken.accessToken|truncate(50, splitSingleWord=true),
+            accessToken: savedInstagramAccessToken.accessToken|truncate(50),
             dateExpiry: dateExpire|date('d F, Y') ~ (daysDifferenceExpired ? ' → expired ' ~ daysDifferenceRemaining ~ ' days ago' : ' → expires in ' ~ daysDifferenceRemaining ~ ' days')
         } %}
         {% set tableValues = tableValues|merge([newTableValue]) %}
