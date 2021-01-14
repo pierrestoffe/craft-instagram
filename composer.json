@@ -2,7 +2,7 @@
     "name": "pierrestoffe/craft-instagram",
     "description": "Instagram integration for Craft CMS",
     "type": "craft-plugin",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "keywords": [
         "craft",
         "cms",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0",
+        "craftcms/cms": "^3.5.0",
         "facebook/graph-sdk": "^5.7",
         "pierrestoffe/php-instagram-graph-sdk": "2.2.1"
     },
