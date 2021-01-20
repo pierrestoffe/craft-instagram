@@ -87,4 +87,23 @@ class Token extends Component
 
         return $record;
     }
+    
+    /**
+     * Register errors in session and log
+     *
+     * @param string $message
+     */
+    public function setError($shortMessage, $errorMessage = null)
+    {
+        $translatedMessage = Craft::t(
+            'instagram',
+            $shortMessage
+        );
+        
+        Craft::$app->getSession()->setError($translatedMessage);
+        Craft::error(
+            $translatedMessage . ': ' . $errorMessage,
+            __METHOD__
+        );
+    }
 }

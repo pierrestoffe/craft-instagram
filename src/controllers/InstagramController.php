@@ -18,6 +18,7 @@ use pierrestoffe\instagram\services\InstagramApi as InstagramApiService;
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
+use yii\base\Exception;
 use yii\web\Response;
 
 /**
@@ -70,16 +71,13 @@ class InstagramController extends Controller
         try {
             $code = Craft::$app->getRequest()->getParam('code');
             $accessToken = $instagramClient->get_access_token($code);
-        } catch(Instagram\Exceptions\InstagramResponseException $e) {
-            $tokenService->_setError('Failed getting Instagram access token', $e->getMessage());
-            return false;
-        } catch(Instagram\Exceptions\InstagramSDKException $e) {
-            $tokenService->_setError('Failed getting Instagram access token', $e->getMessage());
+        } catch (\Throwable $e) {
+            $tokenService->setError('Failed getting Instagram access token', $e->getMessage());
             return false;
         }
         
         if (!isset($accessToken->access_token)) {
-            $tokenService->_setError('Failed getting Instagram access token');
+            $tokenService->setError('Failed getting Instagram access token');
             return false;
         }
         
@@ -89,16 +87,13 @@ class InstagramController extends Controller
             $instagramUserId = $accessToken->user_id;
             $instagramClient->set_access_token($instagramAccessToken);
             $accessToken = $instagramClient->get_long_lived_token();
-        } catch(Instagram\Exceptions\InstagramResponseException $e) {
-            $tokenService->_setError('Failed getting Instagram access token', $e->getMessage());
-            return false;
-        } catch(Instagram\Exceptions\InstagramSDKException $e) {
-            $tokenService->_setError('Failed getting Instagram access token', $e->getMessage());
+        } catch (\Throwable $e) {
+            $tokenService->setError('Failed getting Instagram access token', $e->getMessage());
             return false;
         }
         
         if (!isset($accessToken->access_token)) {
-            $tokenService->_setError('Failed getting Instagram long-lived access token');
+            $tokenService->setError('Failed getting Instagram long-lived access token');
             return false;
         }
         

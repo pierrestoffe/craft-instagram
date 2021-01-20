@@ -44,10 +44,7 @@ class FacebookApi extends Component
         try {
             $response = $facebookClient->get('/instagram_oembed/?url=' . $url, $accessToken);
             $decodedResponse = (object)$response->getDecodedBody();
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            $this->setError('Failed getting Instagram Oembed information', $e->getMessage());
-            return [];
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (\Throwable $e) {
             $this->setError('Failed getting Instagram Oembed information', $e->getMessage());
             return [];
         }
@@ -111,10 +108,7 @@ class FacebookApi extends Component
         try {
             $response = $facebookClient->get('/' . $id . '/?fields=name', $accessToken);
             $facebookUserInformation = $response->getGraphUser() ?? null;
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            $this->setError('Failed getting Facebook username from user ID', $e->getMessage());
-            return null;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (\Throwable $e) {
             $this->setError('Failed getting Facebook username from user ID', $e->getMessage());
             return null;
         }
@@ -145,10 +139,7 @@ class FacebookApi extends Component
         
         try {
             $renewedAccessToken = $oauth2Client->getLongLivedAccessToken($accessToken);
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            $this->setError('Failed renewing Facebook access token', $e->getMessage());
-            return null;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (\Throwable $e) {
             $this->setError('Failed renewing Facebook access token', $e->getMessage());
             return null;
         }

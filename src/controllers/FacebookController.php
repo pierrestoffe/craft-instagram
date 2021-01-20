@@ -18,6 +18,7 @@ use pierrestoffe\instagram\services\FacebookApi as FacebookApiService;
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
+use yii\base\Exception;
 use yii\web\Response;
 
 /**
@@ -72,16 +73,13 @@ class FacebookController extends Controller
         // Get access token
         try {
             $accessToken = $facebookHelper->getAccessToken();
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            $tokenService->_setError('Failed getting Facebook access token', $e->getMessage());
-            return false;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            $tokenService->_setError('Failed getting Facebook access token', $e->getMessage());
+        } catch (\Throwable $e) {
+            $tokenService->setError('Failed getting Facebook access token', $e->getMessage());
             return false;
         }
         
         if (!isset($accessToken)) {
-            $tokenService->_setError('Failed getting Facebook access token');
+            $tokenService->setError('Failed getting Facebook access token');
             return false;
         }
         
