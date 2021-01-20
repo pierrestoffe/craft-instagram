@@ -97,6 +97,10 @@ class Media extends Component
             $facebookApiService = new FacebookApiService();
             $mediaInformation = $facebookApiService->getOembedMedia($url, $accessToken);
             
+            if (empty($mediaInformation)) {
+                continue;
+            }
+            
             // Save media information in cache
             Craft::$app->getCache()->set('instagram-id' . $matches[2], $mediaInformation, 3600);
             
