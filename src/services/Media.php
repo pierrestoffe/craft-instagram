@@ -72,8 +72,8 @@ class Media extends Component
     public function getMediaFromUrls($urls)
     {
         $allMedia = [];
-        $accessToken = Instagram::$plugin->facebook->getSavedAccessTokens();
-        $accessToken = $accessToken[0]->accessToken ?? null;
+        $pluginSettings = Instagram::getInstance()->getSettings();
+        $accessToken = $pluginSettings->facebookAppId . '|' . $pluginSettings->facebookAppSecret;
         
         if (empty($accessToken)) {
             return $allMedia;

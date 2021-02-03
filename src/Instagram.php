@@ -95,7 +95,6 @@ class Instagram extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['instagram/facebook/verify-access-token'] = 'instagram/facebook/verify-access-token';
                 $event->rules['instagram/instagram/verify-access-token'] = 'instagram/instagram/verify-access-token';
             }
         );

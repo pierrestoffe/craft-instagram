@@ -64,35 +64,6 @@ class FacebookApi extends Component
     }
     
     /**
-     * Get all saved access tokens
-     *
-     * @return TokenRecord[]
-     */
-    public function getSavedAccessTokens()
-    {
-        $tokenService = new TokenService();
-        $records = $tokenService->getRecords('facebook', null, false);
-        
-        if (empty($records)) {
-            return false;
-        }
-        
-        foreach ($records as $record) {
-            $accessToken = $record->accessToken ?? null;
-            $dateCurrent = new \DateTime;
-            $dateExpire = new \DateTime($record->dateExpire);
-            
-            $dateDiffDays = $dateExpire->diff($dateCurrent)->format("%a");
-            if ($dateDiffDays < 10) {
-                $accessToken = $this->renewFacebookAccessToken($record);
-                $records = $tokenService->getRecords('facebook', null, false);
-            }
-        }
-
-        return $records;
-    }
-    
-    /**
      * Get a Facebook username from a Facebook user ID
      *
      * @param int $id
@@ -121,43 +92,6 @@ class FacebookApi extends Component
         $facebookUserName = $facebookUserInformation->getField('name');
         
         return $facebookUserName;
-    }
-
-    /**
-     * Renew an access token
-     *
-     * @param TokenRecord $record
-     *
-     * @return TokenRecord
-     */
-    public function renewFacebookAccessToken($record)
-    {
-        $tokenService = new TokenService();
-        $facebookClient = $this->getFacebookClient();
-        $oauth2Client = $facebookClient->getOauth2Client();
-        $accessToken = $record->accessToken;
-        
-        try {
-            $renewedAccessToken = $oauth2Client->getLongLivedAccessToken($accessToken);
-        } catch (\Throwable $e) {
-            $this->setError('Failed renewing Facebook access token', $e->getMessage());
-            return null;
-        }
-        
-        if (!isset($renewedAccessToken)) {
-            $this->setError('Failed renewing Facebook access token');
-            return null;
-        }
-        
-        $facebookUserId = $record->userId;
-        $facebookUsername = $record->username;
-        $facebookAccessToken = $renewedAccessToken->getValue();
-        $facebookAccessToken = $renewedAccessToken->getExpiresAt();
-        
-        // Save record
-        $saveRecord = $tokenService->saveRecord('facebook', $facebookUserId, $facebookUsername, $facebookAccessToken, $facebookDateExpire);
-
-        return $saveRecord;
     }
     
     /**
