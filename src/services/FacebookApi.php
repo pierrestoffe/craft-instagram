@@ -45,12 +45,12 @@ class FacebookApi extends Component
             $response = $facebookClient->get('/instagram_oembed/?url=' . $url, $accessToken);
             $decodedResponse = (object)$response->getDecodedBody();
         } catch (\Throwable $e) {
-            $this->setError('Failed getting Instagram Oembed information', $e->getMessage());
+            $this->_setError('Failed getting Instagram Oembed information', $e->getMessage());
             return [];
         }
         
         if (!isset($decodedResponse)) {
-            $this->setError('Failed getting Instagram Oembed information', $e->getMessage());
+            $this->_setError('Failed getting Instagram Oembed information', $e->getMessage());
             return [];
         }
         
@@ -80,12 +80,12 @@ class FacebookApi extends Component
             $response = $facebookClient->get('/' . $id . '/?fields=name', $accessToken);
             $facebookUserInformation = $response->getGraphUser() ?? null;
         } catch (\Throwable $e) {
-            $this->setError('Failed getting Facebook username from user ID', $e->getMessage());
+            $this->_setError('Failed getting Facebook username from user ID', $e->getMessage());
             return null;
         }
         
         if (!isset($facebookUserInformation)) {
-            $this->setError('Failed getting Facebook user name from user ID');
+            $this->_setError('Failed getting Facebook user name from user ID');
             return null;
         }
         
@@ -113,12 +113,15 @@ class FacebookApi extends Component
         return $facebookClient;
     }
     
+    // Private Methods
+    // =========================================================================
+    
     /**
      * Register errors in session and log
      *
      * @param string $message
      */
-    public function setError($shortMessage, $errorMessage = null)
+    public function _setError($shortMessage, $errorMessage = null)
     {
         $translatedMessage = Craft::t(
             'instagram',

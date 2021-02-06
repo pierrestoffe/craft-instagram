@@ -82,7 +82,7 @@ class Media extends Component
         foreach ($urls as $url) {
             preg_match('/(?:.*)?(instagram\.com\/p\/([\w|_-]*))(?:\/)?(?:.*)?/', $url, $matches);
             if (count($matches) < 2) {
-                $this->setError('The Instagram URL is not valid (' . $url . ')');
+                $this->_setError('The Instagram URL is not valid (' . $url . ')');
                 continue;
             }
             
@@ -110,12 +110,15 @@ class Media extends Component
         return $allMedia;
     }
     
+    // Private Methods
+    // =========================================================================
+    
     /**
      * Register errors in session and log
      *
      * @param string $message
      */
-    public function setError($shortMessage, $errorMessage = null)
+    public function _setError($shortMessage, $errorMessage = null)
     {
         $translatedMessage = Craft::t(
             'instagram',
@@ -127,31 +130,5 @@ class Media extends Component
             $translatedMessage . ': ' . $errorMessage,
             __METHOD__
         );
-    }
-    
-    // Protected Methods
-    // =========================================================================
-    
-    // Parse the JSON that is returned by the Instagram API
-    protected function parseInstagramApi($data) {
-        $media = [];
-        
-        $mediaUrl = $data->thumbnail_url ?? $data->media_url ?? null;
-        $caption = $data->caption ?? null;
-        $type = $data->media_type ?? null;
-        $permalink = $data->permalink ?? null;
-        
-        if (empty($mediaUrl) || empty($permalink)) {
-            return $media;
-        }
-        
-        $media = [
-            'image' => $mediaUrl,
-            'url' => $permalink,
-            'caption' => $caption,
-            'type' => strtolower($type)
-        ];
-        
-        return $media;
     }
 }

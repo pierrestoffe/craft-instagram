@@ -45,7 +45,7 @@ class InstagramApi extends Component
         $userMedia = $instagramClient->get_user_media($userId, $fields);
         
         if (!isset($userMedia->data)) {
-            $this->setError('Failed getting Instagram user media');
+            $this->_setError('Failed getting Instagram user media');
             return [];
         }
         
@@ -113,12 +113,12 @@ class InstagramApi extends Component
         try {
             $instagramUserInformation = $instagramClient->get_user($id);
         } catch(\Exception $e) {
-            $this->setError('Failed getting Instagram username from user ID', $e->getMessage());
+            $this->_setError('Failed getting Instagram username from user ID', $e->getMessage());
             return null;
         }
         
         if (!isset($instagramUserInformation->username)) {
-            $this->setError('Failed getting Instagram user name from user ID');
+            $this->_setError('Failed getting Instagram user name from user ID');
             return null;
         }
         
@@ -142,7 +142,7 @@ class InstagramApi extends Component
         $renewedAccessToken = $instagramClient->get_refresh_token();
         
         if (!isset($renewedAccessToken->access_token)) {
-            $this->setError('Failed renewing Instagram access token');
+            $this->_setError('Failed renewing Instagram access token');
             return null;
         }
         
@@ -184,12 +184,15 @@ class InstagramApi extends Component
         return $instagramClient;
     }
     
+    // Private Methods
+    // =========================================================================
+    
     /**
      * Register errors in session and log
      *
      * @param string $message
      */
-    public function setError($shortMessage, $errorMessage = null)
+    private function _setError($shortMessage, $errorMessage = null)
     {
         $translatedMessage = Craft::t(
             'instagram',

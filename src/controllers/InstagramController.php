@@ -40,7 +40,7 @@ class InstagramController extends Controller
     // =========================================================================
 
     /**
-     * Get a Instagram access token
+     * Get an Instagram access token
      *
      * @return Response|null
      */
@@ -57,7 +57,7 @@ class InstagramController extends Controller
     }
     
     /**
-     * Verify a Instagram access token
+     * Verify an Instagram access token
      *
      * @return Response|bool
      */
