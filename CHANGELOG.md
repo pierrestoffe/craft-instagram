@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.6 - 2022-02-05
+### Added
+- Added Instagram image proxy (useful when using page caching)
+
 ## 1.0.5 - 2021-02-03
 ### Changed
 - Made Facebook Graph API User access token redundant, as an App access token is now used
