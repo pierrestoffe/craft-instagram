@@ -87,7 +87,8 @@ class Media extends Component
             }
             
             // Check first for this media information in the cache
-            $cachedMedia = Craft::$app->getCache()->get('instagram-id-' . $matches[2]);
+            $id = $matches[2];
+            $cachedMedia = Craft::$app->getCache()->get('instagram-id-' . $id);
             if ($cachedMedia !== false) {
                 $allMedia[] = $cachedMedia;
                 continue;
@@ -95,15 +96,15 @@ class Media extends Component
             
             // Otherwise make a new request to Facebook's API
             $facebookApiService = new FacebookApiService();
-            $mediaInformation = $facebookApiService->getOembedMedia($url, $accessToken);
-            
+            $mediaInformation = $facebookApiService->getOembedMedia($url, $id, $accessToken);
+
             if (empty($mediaInformation)) {
                 continue;
             }
             
             // Save media information in cache
-            Craft::$app->getCache()->set('instagram-id' . $matches[2], $mediaInformation, 3600);
-            
+            Craft::$app->getCache()->set('instagram-id' . $id, $mediaInformation, 3600);
+
             $allMedia[] = $mediaInformation;
         }
 

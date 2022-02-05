@@ -33,11 +33,12 @@ class FacebookApi extends Component
      * Get a media information using the Oembed Facebook API endpoint
      * 
      * @param string $url
+     * @param string $id
      * @param string $accessToken
      *
      * @return object
      */
-    public function getOembedMedia($url, $accessToken)
+    public function getOembedMedia($url, $id, $accessToken)
     {
         $facebookClient = $this->getFacebookClient();
         
@@ -57,6 +58,7 @@ class FacebookApi extends Component
         $oembedMediaInformation = [
             'image' => $decodedResponse->thumbnail_url ?? null,
             'url' => $url,
+            'id' => $id,
             'handle' => $decodedResponse->author_name ?? null,
         ];
         

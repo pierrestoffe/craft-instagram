@@ -112,4 +112,18 @@ class InstagramController extends Controller
         $redirectUrl = UrlHelper::cpUrl('settings/plugins/instagram');
         return $this->redirect($redirectUrl);
     }
+
+    public function actionGetImageUrl($mediaId)
+    {
+        $url = 'https://www.instagram.com/p/' . $mediaId;
+        $mediaFromUrls = Instagram::$plugin->media->getMediaFromUrls([$url]);
+
+        if (empty($mediaFromUrls)) {
+            return $this->asRaw('');
+        }
+
+        $imageUrl = $mediaFromUrls[0]['image'] ?? null;
+
+        return $this->redirect($imageUrl);
+    }
 }
