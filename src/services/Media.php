@@ -57,7 +57,7 @@ class Media extends Component
         $allMedia = $instagramClient->getUserMedia($userId, $fields, $accessToken);
         
         // Save media information in cache
-        Craft::$app->getCache()->set('instagram-user' . $username, $allMedia, 3600);
+        Craft::$app->getCache()->set('instagram-user-' . $username, $allMedia, 3600);
 
         return $allMedia;
     }
@@ -103,7 +103,7 @@ class Media extends Component
             }
             
             // Save media information in cache
-            Craft::$app->getCache()->set('instagram-id' . $id, $mediaInformation, 3600);
+            Craft::$app->getCache()->set('instagram-id-' . $id, $mediaInformation, 3600);
 
             $allMedia[] = $mediaInformation;
         }
