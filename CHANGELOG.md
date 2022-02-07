@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.1 - 2022-02-07
+### Fixed
+- Fixed issue with Instagram media slugs not being caught
+
 ## 1.1.0 - 2022-02-05
 ### Added
 - Fixed issue with data caching
