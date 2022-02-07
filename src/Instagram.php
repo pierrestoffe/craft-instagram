@@ -103,7 +103,7 @@ class Instagram extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['instagram/get-image-url/<mediaId:[\w-]+>'] = 'instagram/instagram/get-image-url';
+                $event->rules['instagram/get-image-url/<mediaId:[\w|_-]*>'] = 'instagram/instagram/get-image-url';
             }
         );
 
