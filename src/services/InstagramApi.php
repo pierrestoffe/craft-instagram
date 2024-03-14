@@ -11,12 +11,10 @@
 namespace pierrestoffe\instagram\services;
 
 use pierrestoffe\instagram\Instagram;
-use pierrestoffe\instagram\services\FacebookApi as FacebookApiService;
 use pierrestoffe\instagram\services\Token as TokenService;
 
 use Craft;
 use craft\base\Component;
-use craft\config\GeneralConfig;
 use craft\helpers\UrlHelper;
 use Instagram\Instagram as InstagramClient;
 
@@ -26,13 +24,13 @@ use Instagram\Instagram as InstagramClient;
  * @since     1.0.0
  */
 class InstagramApi extends Component
-{    
+{
     // Public Methods
     // =========================================================================
-    
+
     /**
      * Get a user's media feed using Instagram's API
-     * 
+     *
      * @param string $userId
      * @param string $fields
      * @param string $accessToken
@@ -43,12 +41,12 @@ class InstagramApi extends Component
     {
         $instagramClient = $this->getInstagramClient($accessToken);
         $userMedia = $instagramClient->get_user_media($userId, $fields);
-        
+
         if (!isset($userMedia->data)) {
             $this->_setError('Failed getting Instagram user media');
             return [];
         }
-        
+
         $userMediaData = $userMedia->data;
         $userMediaInformation = [];
         foreach ($userMediaData as $media) {
@@ -59,13 +57,13 @@ class InstagramApi extends Component
                 'caption' => $media->caption ?? null,
                 'type' => $media->media_type ?? null
             ];
-            
+
             $userMediaInformation[] = $userMediaInformationTemp;
         }
-        
+
         return $userMediaInformation;
     }
-    
+
     /**
      * Get all saved access tokens
      *
@@ -75,27 +73,27 @@ class InstagramApi extends Component
     {
         $tokenService = new TokenService();
         $records = $tokenService->getRecords('instagram', $username, false);
-        
+
         if (empty($records)) {
             return false;
         }
-        
+
         foreach ($records as $record) {
             $accessToken = $record->accessToken ?? null;
             $dateCurrent = new \DateTime;
             $dateExpire = new \DateTime($record->dateExpire);
-            
+
             $dateDiffDays = $dateExpire->diff($dateCurrent)->format("%a");
             if ($dateDiffDays < 10) {
                 $accessToken = $this->renewInstagramAccessToken($record);
             }
         }
-        
+
         $records = $tokenService->getRecords('instagram', $username, false);
 
         return $records;
     }
-    
+
     /**
      * Get an Instagram username from an Instagram user ID
      *
@@ -109,21 +107,21 @@ class InstagramApi extends Component
         $tokenService = new TokenService();
         $instagramClient = $this->getInstagramClient();
         $instagramClient->set_access_token($accessToken);
-        
+
         try {
             $instagramUserInformation = $instagramClient->get_user($id);
         } catch(\Exception $e) {
             $this->_setError('Failed getting Instagram username from user ID', $e->getMessage());
             return null;
         }
-        
+
         if (!isset($instagramUserInformation->username)) {
             $this->_setError('Failed getting Instagram user name from user ID');
             return null;
         }
-        
+
         $instagramUsername = $instagramUserInformation->username;
-        
+
         return $instagramUsername;
     }
 
@@ -140,25 +138,25 @@ class InstagramApi extends Component
         $accessToken = $record->accessToken;
         $instagramClient = $this->getInstagramClient($accessToken);
         $renewedAccessToken = $instagramClient->get_refresh_token();
-        
+
         if (!isset($renewedAccessToken->access_token)) {
             $this->_setError('Failed renewing Instagram access token');
             return null;
         }
-        
+
         $instagramUserId = $record->userId;
         $instagramUsername = $record->username;
         $instagramAccessToken = $renewedAccessToken->access_token;
         $instagramDateExpiresIn = $renewedAccessToken->expires_in;
         $instagramDateExpire = new \DateTime;
         $instagramDateExpire->modify('+ ' . $instagramDateExpiresIn . 'seconds');
-        
+
         // Save record
         $saveRecord = $tokenService->saveRecord('instagram', $instagramUserId, $instagramUsername, $instagramAccessToken, $instagramDateExpire);
 
         return $saveRecord;
     }
-    
+
     /**
      * Initiate the Instagram Client
      *
@@ -176,17 +174,17 @@ class InstagramApi extends Component
             $instagramVerifyControllerUrl,
         );
         $instagramClient->set_scope('user_profile,user_media');
-        
+
         if (!empty($accessToken)) {
             $instagramClient->set_access_token($accessToken);
         }
-        
+
         return $instagramClient;
     }
-    
+
     // Private Methods
     // =========================================================================
-    
+
     /**
      * Register errors in session and log
      *
@@ -198,7 +196,7 @@ class InstagramApi extends Component
             'instagram',
             $shortMessage
         );
-        
+
         Craft::$app->getSession()->setError($translatedMessage);
         Craft::error(
             $translatedMessage . ': ' . $errorMessage,

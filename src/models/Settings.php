@@ -10,9 +10,6 @@
 
 namespace pierrestoffe\instagram\models;
 
-use pierrestoffe\instagram\Instagram;
-
-use Craft;
 use craft\base\Model;
 
 /**
@@ -47,7 +44,7 @@ class Settings extends Model
 
     // Public Methods
     // =========================================================================
-    
+
     /**
      * @inheritdoc
      */

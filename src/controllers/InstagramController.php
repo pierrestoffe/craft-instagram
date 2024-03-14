@@ -11,14 +11,12 @@
 namespace pierrestoffe\instagram\controllers;
 
 use pierrestoffe\instagram\Instagram;
-use pierrestoffe\instagram\models\Settings as SettingsModel;
 use pierrestoffe\instagram\services\Token as TokenService;
 use pierrestoffe\instagram\services\InstagramApi as InstagramApiService;
 
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
-use yii\base\Exception;
 use yii\web\Response;
 
 /**
@@ -27,7 +25,7 @@ use yii\web\Response;
  * @since     1.0.0
  */
 class InstagramController extends Controller
-{    
+{
     // Public Properties
     // =========================================================================
 
@@ -48,14 +46,14 @@ class InstagramController extends Controller
     {
         $instagramService = new InstagramApiService();
         $instagramClient = $instagramService->getInstagramClient();
-        
+
         // Get Instagram Login url
         $loginUrl = $instagramClient->get_authorize_url();
-        
+
         // Redirect to Instagram Login url
         return $this->redirect($loginUrl);
     }
-    
+
     /**
      * Verify an Instagram access token
      *
@@ -66,7 +64,7 @@ class InstagramController extends Controller
         $tokenService = new TokenService();
         $instagramService = new InstagramApiService();
         $instagramClient = $instagramService->getInstagramClient();
-        
+
         // Get access token
         try {
             $code = Craft::$app->getRequest()->getParam('code');
@@ -75,12 +73,12 @@ class InstagramController extends Controller
             $tokenService->setError('Failed getting Instagram access token', $e->getMessage());
             return false;
         }
-        
+
         if (!isset($accessToken->access_token)) {
             $tokenService->setError('Failed getting Instagram access token');
             return false;
         }
-        
+
         // Get long-lived access token
         try {
             $instagramAccessToken = $accessToken->access_token;
@@ -91,12 +89,12 @@ class InstagramController extends Controller
             $tokenService->setError('Failed getting Instagram access token', $e->getMessage());
             return false;
         }
-        
+
         if (!isset($accessToken->access_token)) {
             $tokenService->setError('Failed getting Instagram long-lived access token');
             return false;
         }
-        
+
         // Get access token information
         $instagramAccessToken = $accessToken->access_token;
         $instagramUser = $instagramClient->get_user($instagramUserId);
@@ -104,10 +102,10 @@ class InstagramController extends Controller
         $instagramDateExpiresIn = $accessToken->expires_in;
         $instagramDateExpire = new \DateTime;
         $instagramDateExpire->modify('+ ' . $instagramDateExpiresIn . 'seconds');
-        
+
         // Save record
         $saveRecord = $tokenService->saveRecord('instagram', $instagramUserId, $instagramUsername, $instagramAccessToken, $instagramDateExpire);
-        
+
         // Redirect to plugin settings page
         $redirectUrl = UrlHelper::cpUrl('settings/plugins/instagram');
         return $this->redirect($redirectUrl);

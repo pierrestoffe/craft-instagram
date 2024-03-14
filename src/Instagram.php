@@ -11,7 +11,6 @@
 namespace pierrestoffe\instagram;
 
 use pierrestoffe\instagram\models\Settings as SettingsModel;
-use pierrestoffe\instagram\models\Token as TokenModel;
 use pierrestoffe\instagram\services\Media as MediaService;
 use pierrestoffe\instagram\services\Settings as SettingsService;
 use pierrestoffe\instagram\services\InstagramApi as InstagramService;

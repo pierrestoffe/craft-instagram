@@ -12,8 +12,6 @@ namespace pierrestoffe\instagram\variables;
 
 use pierrestoffe\instagram\Instagram;
 
-use Craft;
-
 /**
  * @author    Pierre Stoffe
  * @package   Instagram
@@ -36,6 +34,13 @@ class InstagramVariable
         $mediaFromUrls = Instagram::$plugin->media->getMediaFromUrls($urls);
 
         return $mediaFromUrls;
+    }
+
+    public function getHtmlFromUrls($urls)
+    {
+        $htmlFromUrls = Instagram::$plugin->media->getHtmlFromUrls($urls);
+
+        return $htmlFromUrls;
     }
 
     public function getSavedInstagramAccessToken($username)

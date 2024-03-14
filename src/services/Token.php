@@ -10,15 +10,10 @@
 
 namespace pierrestoffe\instagram\services;
 
-use pierrestoffe\instagram\Instagram;
 use pierrestoffe\instagram\records\Token as TokenRecord;
 
 use Craft;
 use craft\base\Component;
-use craft\config\GeneralConfig;
-use craft\helpers\UrlHelper;
-use Facebook\Facebook;
-use GuzzleHttp\Client as GuzzleClient;
 
 /**
  * @author    Pierre Stoffe
@@ -26,7 +21,7 @@ use GuzzleHttp\Client as GuzzleClient;
  * @since     1.0.0
  */
 class Token extends Component
-{    
+{
     // Public Methods
     // =========================================================================
 
@@ -42,7 +37,7 @@ class Token extends Component
         if (!empty($username)) {
             $records = $records->andWhere(['username' => $username]);
         }
-        
+
         if ($single) {
             $records = $records->one();
         } else {
@@ -87,7 +82,7 @@ class Token extends Component
 
         return $record;
     }
-    
+
     /**
      * Register errors in session and log
      *
@@ -99,7 +94,7 @@ class Token extends Component
             'instagram',
             $shortMessage
         );
-        
+
         Craft::$app->getSession()->setError($translatedMessage);
         Craft::error(
             $translatedMessage . ': ' . $errorMessage,

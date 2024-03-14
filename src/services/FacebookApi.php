@@ -15,8 +15,6 @@ use pierrestoffe\instagram\services\Token as TokenService;
 
 use Craft;
 use craft\base\Component;
-use craft\config\GeneralConfig;
-use craft\helpers\UrlHelper;
 use Facebook\Facebook as FacebookClient;
 
 /**
@@ -25,13 +23,13 @@ use Facebook\Facebook as FacebookClient;
  * @since     1.0.0
  */
 class FacebookApi extends Component
-{    
+{
     // Public Methods
     // =========================================================================
-    
+
     /**
      * Get a media information using the Oembed Facebook API endpoint
-     * 
+     *
      * @param string $url
      * @param string $id
      * @param string $accessToken
@@ -41,7 +39,7 @@ class FacebookApi extends Component
     public function getOembedMedia($url, $id, $accessToken)
     {
         $facebookClient = $this->getFacebookClient();
-        
+
         try {
             $response = $facebookClient->get('/instagram_oembed/?url=' . $url, $accessToken);
             $decodedResponse = (object)$response->getDecodedBody();
@@ -49,22 +47,23 @@ class FacebookApi extends Component
             $this->_setError('Failed getting Instagram Oembed information', $e->getMessage());
             return [];
         }
-        
+
         if (!isset($decodedResponse)) {
             $this->_setError('Failed getting Instagram Oembed information', $e->getMessage());
             return [];
         }
-        
+
         $oembedMediaInformation = [
             'image' => $decodedResponse->thumbnail_url ?? null,
             'url' => $url,
             'id' => $id,
             'handle' => $decodedResponse->author_name ?? null,
+            'html' => $decodedResponse->html ?? null
         ];
-        
+
         return $oembedMediaInformation;
     }
-    
+
     /**
      * Get a Facebook username from a Facebook user ID
      *
@@ -77,7 +76,7 @@ class FacebookApi extends Component
     {
         $tokenService = new TokenService();
         $facebookClient = $this->getFacebookClient();
-        
+
         try {
             $response = $facebookClient->get('/' . $id . '/?fields=name', $accessToken);
             $facebookUserInformation = $response->getGraphUser() ?? null;
@@ -85,17 +84,17 @@ class FacebookApi extends Component
             $this->_setError('Failed getting Facebook username from user ID', $e->getMessage());
             return null;
         }
-        
+
         if (!isset($facebookUserInformation)) {
             $this->_setError('Failed getting Facebook user name from user ID');
             return null;
         }
-        
+
         $facebookUserName = $facebookUserInformation->getField('name');
-        
+
         return $facebookUserName;
     }
-    
+
     /**
      * Initiate the Facebook Client
      *
@@ -111,13 +110,13 @@ class FacebookApi extends Component
             'app_secret' => $facebookAppSecret,
             'default_graph_version' => 'v8.0'
         ]);
-        
+
         return $facebookClient;
     }
-    
+
     // Private Methods
     // =========================================================================
-    
+
     /**
      * Register errors in session and log
      *
@@ -129,7 +128,7 @@ class FacebookApi extends Component
             'instagram',
             $shortMessage
         );
-        
+
         Craft::$app->getSession()->setError($translatedMessage);
         Craft::error(
             $translatedMessage . ': ' . $errorMessage,
