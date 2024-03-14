@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.0 - 2024-03-14
+### Added
+- Added getHtmlFromUrls method for getting embed HTML
+
+## Fixed
+- Removed unused class dependencies
+
 ## 1.1.1 - 2022-02-07
 ### Fixed
 - Fixed issue with Instagram media slugs not being caught
