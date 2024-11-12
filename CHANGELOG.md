@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.3.0 - 2024-11-12
+### Added
+- Added support for Instagram reel URLs
+
 ## 1.2.0 - 2024-03-14
 ### Added
 - Added getHtmlFromUrls method for getting embed HTML
