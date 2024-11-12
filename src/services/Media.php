@@ -78,7 +78,7 @@ class Media extends Component
         }
 
         foreach ($urls as $url) {
-            preg_match('/(?:.*)?(instagram\.com\/p\/([\w|_-]*))(?:\/)?(?:.*)?/', $url, $matches);
+            preg_match('/(?:.*)?(instagram\.com\/(p|reel)\/([\w|_-]*))(?:\/)?(?:.*)?/', $url, $matches);
             if (count($matches) < 2) {
                 $this->_setError('The Instagram URL is not valid (' . $url . ')');
                 continue;
